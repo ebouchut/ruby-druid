@@ -109,7 +109,7 @@ module Druid
       postagg(:double, &block)
     end
 
-    def filter(hash = nil, &block)
+    def filter(hash = nil, param, &block)
       if hash
         last = nil
         hash.each do |k,values|
@@ -119,7 +119,7 @@ module Druid
         @properties[:filter] = @properties[:filter] ? @properties[:filter].&(last) : last
       end
       if block
-        filter = Filter.new.instance_exec(&block)
+        filter = Filter.new.instance_exec(param, &block)
         raise "Not a valid filter" unless filter.is_a? FilterParameter
         @properties[:filter] = @properties[:filter] ? @properties[:filter].&(filter) : filter
       end
